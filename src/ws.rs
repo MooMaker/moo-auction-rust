@@ -1,4 +1,3 @@
-// use crate::{Client, Clients, MarketMakerAuction};
 use crate::{Client, Clients};
 use futures::{FutureExt, StreamExt};
 use tokio::sync::mpsc;

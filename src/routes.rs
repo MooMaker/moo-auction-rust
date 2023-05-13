@@ -1,4 +1,3 @@
-use std::convert::Infallible;
 use warp::{self, Filter};
 
 use super::models;

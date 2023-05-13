@@ -1,9 +1,10 @@
-use std::{collections::HashMap, convert::Infallible, fs, sync::Arc};
+use futures::future;
+use std::fs::File;
+use std::io::prelude::*;
+use std::thread;
+use std::{collections::HashMap, convert::Infallible, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
 use warp::{ws::Message, Filter, Rejection};
-
-use std::sync::mpsc::channel;
-use std::thread;
 
 mod handlers;
 mod models;
@@ -21,19 +22,10 @@ type Result<T> = std::result::Result<T, Rejection>;
 
 #[tokio::main]
 async fn main() {
-    // Create a simple streaming channel
-    let (tx, rx) = channel();
-    thread::spawn(move || {
-        tx.send(10).unwrap();
-    });
-    assert_eq!(rx.recv().unwrap(), 10);
-
     //setup REST endpoint for solver
-    let solver_routes = routes::routes();
-    warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
+    thread::spawn(|| rest_endpoint());
 
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
-    fs::write("clients.txt", "dsfsf").expect("Unable to write file");
 
     println!("Configuring websocket route");
     let ws_route = warp::path("marketmaker")
@@ -50,7 +42,9 @@ fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = I
     warp::any().map(move || clients.clone())
 }
 
-fn read_file_string(filepath: &str) -> String {
-    let data = fs::read_to_string(filepath);
-    data.unwrap()
+async fn rest_endpoint() {
+    let solver_routes = routes::routes();
+    warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
 }
+
+async fn ws_endpoint() {}
