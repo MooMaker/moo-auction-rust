@@ -15,9 +15,9 @@ pub struct Auction {
 #[serde(rename_all = "camelCase")]
 pub struct Token {
     pub decimals: i64,
-    pub alias: String,
+    pub alias: Option<String>,
     #[serde(rename = "external_price")]
-    pub external_price: f64,
+    pub external_price: Option<f64>,
     #[serde(rename = "normalize_priority")]
     pub normalize_priority: i64,
     #[serde(rename = "internal_buffer")]
@@ -63,7 +63,7 @@ pub struct Cost {
 #[serde(rename_all = "camelCase")]
 pub struct Amm {
     pub kind: String,
-    pub reserves: Reserves,
+    // pub reserves: Reserves,
     pub fee: String,
     pub cost: Cost,
     pub mandatory: bool,
@@ -72,11 +72,10 @@ pub struct Amm {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Reserves {
-    #[serde(rename = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")]
     pub n0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48: String,
-    #[serde(rename = "0xc00e94cb662c3520282e6f5717214004a7f26888")]
     pub n0xc00e94cb662c3520282e6f5717214004a7f26888: String,
 }
+// TODO implement this somehow
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
