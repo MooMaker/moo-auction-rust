@@ -43,7 +43,7 @@ async fn main() {
     println!("Starting server");
     warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
 
-    ws::publish_auction(json_input);
+    ws::publish_auction(json_input, &clients.clone());
 }
 
 fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = Infallible> + Clone {
