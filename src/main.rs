@@ -3,6 +3,9 @@ use std::{collections::HashMap, convert::Infallible, fs, path::Path, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
 use warp::{ws::Message, Filter, Rejection};
 
+use std::sync::mpsc::channel;
+use std::thread;
+
 mod handlers;
 mod models;
 mod routes;
@@ -28,6 +31,13 @@ type Result<T> = std::result::Result<T, Rejection>;
 
 #[tokio::main]
 async fn main() {
+    // Create a simple streaming channel
+    let (tx, rx) = channel();
+    thread::spawn(move || {
+        tx.send(10).unwrap();
+    });
+    assert_eq!(rx.recv().unwrap(), 10);
+
     //setup REST endpoint for solver
     let solver_routes = routes::routes();
     warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
@@ -47,8 +57,6 @@ async fn main() {
     let routes = ws_route.with(warp::cors().allow_any_origin());
     println!("Starting server");
     warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
-
-    ws::publish_auction(json_input, &clients.clone());
 }
 
 fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = Infallible> + Clone {
