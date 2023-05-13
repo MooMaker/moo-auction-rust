@@ -33,24 +33,13 @@ impl Auction {
     }
 
     pub fn add_bid(&mut self, bidder_id: String, amount: u64) {
-        let bid = Bid {
-            bidder_id,
-            amount,
-        };
+        let bid = Bid { bidder_id, amount };
 
         self.bids.push(bid);
     }
 
     // Add more methods as needed for bid validation, handling time limit, etc.
 }
-
-
-
-
-
-
-
-
 
 pub fn compare_solution(solution_json: String) {
     //TODO get best solution from storage
@@ -63,5 +52,3 @@ pub fn compare_solution(solution_json: String) {
 fn compute_value(solution_json: String) -> f64 {
     return 0.0;
 }
-
-

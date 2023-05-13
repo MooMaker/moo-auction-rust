@@ -75,6 +75,7 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
         if isValidJson {
             reply_text = "Solution received";
         }
+
         match locked.get(client_id) {
             Some(v) => {
                 if let Some(sender) = &v.sender {

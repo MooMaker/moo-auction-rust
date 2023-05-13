@@ -17,8 +17,8 @@ fn post_cow_auction() -> impl Filter<Extract = impl warp::Reply, Error = warp::R
 }
 
 fn json_body() -> impl Filter<Extract = (models::Auction,), Error = warp::Rejection> + Clone {
-    warp::body::content_length_limit(1024 * 256).and(warp::body::json())
-    // TODO remove payload size limit
+    warp::body::content_length_limit(1024 * 512).and(warp::body::json())
+    // TODO remove payload size limit completely (for larger orders)
 }
 
 fn post_announce_winner() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone
