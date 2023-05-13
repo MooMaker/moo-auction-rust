@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::thread;
 use std::{collections::HashMap, convert::Infallible, sync::Arc};
+use once_cell::sync::Lazy;
 use tokio::sync::{mpsc, Mutex};
 use warp::{ws::Message, Filter, Rejection};
 
@@ -17,10 +18,10 @@ pub struct Client {
     pub sender: Option<mpsc::UnboundedSender<std::result::Result<Message, warp::Error>>>,
 }
 
-type Clients = Arc<Mutex<HashMap<String, Client>>>;
+pub type Clients = Arc<Mutex<HashMap<String, Client>>>;
 type Result<T> = std::result::Result<T, Rejection>;
 
-// static clients: Clients = Arc::new(Mutex::new(HashMap::new()));
+pub static CLIENTS: Lazy<Clients> = Lazy::new(Default::default);
 
 #[tokio::main]
 async fn main() {
@@ -30,13 +31,10 @@ async fn main() {
         warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
     });
 
-    let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
-    // save_clients_to_json(&clients);
-
     println!("Configuring websocket route");
     let ws_route = warp::path("marketmaker")
         .and(warp::ws())
-        .and(with_clients(clients.clone()))
+        .and(with_clients(CLIENTS.clone()))
         .and_then(handlers::ws_handler);
 
     let routes = ws_route.with(warp::cors().allow_any_origin());
