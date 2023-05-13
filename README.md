@@ -1,4 +1,4 @@
-![alt text](https://github.com/MooMaker/moo-offchain/images/noun.jpg?raw=true)
+![cow noun](https://github.com/MooMaker/moo-offchain/blob/main/images/noun.png)
 # MooMaker Offchain services
 
 
