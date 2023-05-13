@@ -30,7 +30,6 @@ type Result<T> = std::result::Result<T, Rejection>;
 async fn main() {
     //setup REST endpoint for solver
     let solver_routes = routes::routes();
-
     warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
 
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
