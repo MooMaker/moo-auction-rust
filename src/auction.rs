@@ -19,7 +19,7 @@ pub struct Auction {
     pub metadata: Metadata,
 }
 
-impl Auction {
+impl MooAuction {
     pub fn new(auction_id: String, time_limit: u64) -> Self {
         Self {
             auction_id,
@@ -37,6 +37,9 @@ impl Auction {
 
         self.bids.push(bid);
     }
+
+    pub 
+
 
     // Add more methods as needed for bid validation, handling time limit, etc.
 }
