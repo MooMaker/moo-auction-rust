@@ -86,7 +86,7 @@ pub struct Metadata {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct maker_bid {
+pub struct Bid {
     pub id: u64,
     pub token_in: String,
     pub token_out: String,
