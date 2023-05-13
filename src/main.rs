@@ -5,6 +5,7 @@ use warp::{ws::Message, Filter, Rejection};
 
 mod handlers;
 mod models;
+mod routes;
 mod ws;
 
 pub const API_HOST: &str = "http://127.0.0.1:8080";
@@ -27,6 +28,11 @@ type Result<T> = std::result::Result<T, Rejection>;
 
 #[tokio::main]
 async fn main() {
+    //setup REST endpoint for solver
+    let solver_routes = routes::routes();
+
+    warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
+
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
 
     let json_input = read_file_string(
@@ -34,7 +40,7 @@ async fn main() {
     );
 
     println!("Configuring websocket route");
-    let ws_route = warp::path("ws")
+    let ws_route = warp::path("marketmaker")
         .and(warp::ws())
         .and(with_clients(clients.clone()))
         .and_then(handlers::ws_handler);

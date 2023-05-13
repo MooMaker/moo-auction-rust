@@ -74,8 +74,6 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
         let mut reply_text = "Not a valid solution";
         if isValidJson {
             reply_text = "Solution received";
-
-            // TODO compare solution to current best
         }
         match locked.get(client_id) {
             Some(v) => {
@@ -90,8 +88,13 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
     };
 }
 
-pub fn publish_auction(auction_json: String, clients: &Clients) {
+pub async fn publish_auction(auction_json: String, clients: &Clients) {
     println!("publishing auction");
-    // let _ = sender.send(Ok(Message::text(auction_json)));
-    // return;
+    // Iterate over the clients
+    for (_, client) in clients.lock().await.iter() {
+        if let Some(sender) = &client.sender {
+            // Send the auction JSON message to the client
+            let _ = sender.send(Ok(Message::text(auction_json.clone())));
+        }
+    }
 }
