@@ -545,6 +545,7 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "futures",
+ "once_cell",
  "reqwest",
  "serde",
  "serde_derive",
