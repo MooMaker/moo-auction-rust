@@ -2,8 +2,6 @@ use crate::models::{Amm, Bid, Metadata, Order, Token};
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct MooAuction {
     pub auction_id: String,
     pub time_limit: u64,
