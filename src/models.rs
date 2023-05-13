@@ -72,9 +72,18 @@ pub struct Amm {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Reserves {
-    pub n0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48: String,
-    pub n0xc00e94cb662c3520282e6f5717214004a7f26888: String,
+    #[serde(flatten)]
+    inner: HashMap<String, ReservesValues>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReservesValues {
+    #[serde(flatten)]
+    pub balance: u64,
+    pub weight: f64,
+}
+
 // TODO implement this somehow
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -82,7 +91,6 @@ pub struct Reserves {
 pub struct Metadata {
     pub environment: String,
 }
-
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
