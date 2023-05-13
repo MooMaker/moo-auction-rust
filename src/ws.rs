@@ -89,7 +89,7 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
 }
 
 pub async fn publish_auction(auction_json: String, clients: &Clients) {
-    println!("publishing auction");
+    println!("publishing COW auction to market makers");
     // Iterate over the clients
     for (_, client) in clients.lock().await.iter() {
         if let Some(sender) = &client.sender {
