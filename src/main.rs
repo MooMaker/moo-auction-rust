@@ -20,6 +20,8 @@ pub struct Client {
 type Clients = Arc<Mutex<HashMap<String, Client>>>;
 type Result<T> = std::result::Result<T, Rejection>;
 
+// static clients: Clients = Arc::new(Mutex::new(HashMap::new()));
+
 #[tokio::main]
 async fn main() {
     //setup REST endpoint for solver
@@ -29,6 +31,7 @@ async fn main() {
     });
 
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
+    // save_clients_to_json(&clients);
 
     println!("Configuring websocket route");
     let ws_route = warp::path("marketmaker")
@@ -45,6 +48,15 @@ fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = I
     warp::any().map(move || clients.clone())
 }
 
-async fn rest_endpoint() {}
+// fn save_clients_to_json(clients: &Clients) {
+//     // Serialize the 'clients' HashMap to JSON
+//     let serialized =
+//         serde_json::to_string(&*clients.lock().unwrap()).expect("Failed to serialize to JSON");
 
-async fn ws_endpoint() {}
+//     // Open the file in write mode
+//     let mut file = File::create("clients.json").expect("Failed to create file");
+
+//     // Write the JSON string to the file
+//     file.write_all(serialized.as_bytes())
+//         .expect("Failed to write to file");
+// }
