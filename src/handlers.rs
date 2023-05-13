@@ -9,8 +9,7 @@ pub async fn ws_handler(ws: warp::ws::Ws, clients: Clients) -> Result<impl Reply
 }
 
 pub async fn auction_handler(auction: Auction) -> Result<impl warp::Reply> {
-    let json = serde_json::to_string(&auction);
-    println!("{}", json.unwrap());
+    let json = serde_json::to_string(&auction).unwrap();
     println!("auction_handler");
 
     //query parameters is metadata for auction
