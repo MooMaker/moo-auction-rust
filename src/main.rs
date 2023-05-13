@@ -1,5 +1,4 @@
-use reqwest::Error;
-use std::{collections::HashMap, convert::Infallible, fs, path::Path, sync::Arc};
+use std::{collections::HashMap, convert::Infallible, fs, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
 use warp::{ws::Message, Filter, Rejection};
 
@@ -10,15 +9,6 @@ mod handlers;
 mod models;
 mod routes;
 mod ws;
-
-pub const API_HOST: &str = "http://127.0.0.1:8080";
-pub const ORDERS_ENDPOINT: &str = "/api/v1/orders";
-pub const QUOTING_ENDPOINT: &str = "/api/v1/quote";
-pub const ACCOUNT_ENDPOINT: &str = "/api/v1/account";
-pub const AUCTION_ENDPOINT: &str = "/api/v1/auction";
-pub const TRADES_ENDPOINT: &str = "/api/v1/trades";
-pub const VERSION_ENDPOINT: &str = "/api/v1/version";
-pub const SOLVER_COMPETITION_ENDPOINT: &str = "/api/v1/solver_competition";
 
 #[derive(Debug, Clone)]
 pub struct Client {
@@ -43,10 +33,7 @@ async fn main() {
     warp::serve(solver_routes).run(([127, 0, 0, 1], 3000)).await;
 
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
-
-    let json_input = read_file_string(
-        "C:/Users/Arjan van Hoogdalem/git/moo-offchain/examples/single_order_instance1_input.json",
-    );
+    fs::write("clients.txt", "dsfsf").expect("Unable to write file");
 
     println!("Configuring websocket route");
     let ws_route = warp::path("marketmaker")

@@ -1,6 +1,4 @@
 use crate::{models::Auction, ws, Clients, Result};
-// use rabbitmq_    stream_client::{types::Message, Environment};
-// use reqwest::StatusCode;
 use warp::Reply;
 use warp::{http::StatusCode, reply, Filter};
 
@@ -33,7 +31,7 @@ pub async fn auction_handler(auction: Auction) -> Result<impl warp::Reply> {
 }
 
 pub async fn announce_winner(auction: Auction) -> Result<impl warp::Reply> {
-    println!("announcing winning auction");
+    println!("announcing winning auction:");
 
     //TODO: fwd to MM via ws
 

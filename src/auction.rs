@@ -39,9 +39,13 @@ impl Auction {
                 // Check and update the winning bid
                 if self.winning_bid.is_none() {
                     self.winning_bid = Some(bid);
-                } else if order.is_sell_order && bid.amount > self.winning_bid.as_ref().unwrap().amount {
+                } else if order.is_sell_order
+                    && bid.amount > self.winning_bid.as_ref().unwrap().amount
+                {
                     self.winning_bid = Some(bid);
-                } else if !order.is_sell_order && bid.amount < self.winning_bid.as_ref().unwrap().amount {
+                } else if !order.is_sell_order
+                    && bid.amount < self.winning_bid.as_ref().unwrap().amount
+                {
                     self.winning_bid = Some(bid);
                 }
             }
@@ -54,17 +58,4 @@ impl Auction {
         }
         None
     }
-}
-
-
-pub fn compare_solution(solution_json: String) {
-    //TODO get best solution from storage
-    let mut best_solution = "{}";
-    if compute_value(solution_json) > compute_value(best_solution) {
-        best_solution = solution_json;
-    }
-}
-
-fn compute_value(solution_json: String) -> f64 {
-    return 0.0;
 }

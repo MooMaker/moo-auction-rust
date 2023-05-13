@@ -70,11 +70,7 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
         let locked = clients.lock().await;
 
         // TODO: implement json validation
-        let isValidJson = true;
-        let mut reply_text = "Not a valid solution";
-        if isValidJson {
-            reply_text = "Solution received";
-        }
+        let reply_text = "Solution received";
 
         match locked.get(client_id) {
             Some(v) => {
