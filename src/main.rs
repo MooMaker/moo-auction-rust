@@ -1,9 +1,10 @@
 use reqwest::Error;
-use std::{collections::HashMap, convert::Infallible, sync::Arc};
+use std::{collections::HashMap, convert::Infallible, fs, path::Path, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
 use warp::{ws::Message, Filter, Rejection};
 
 mod handlers;
+mod models;
 mod ws;
 
 pub const API_HOST: &str = "http://127.0.0.1:8080";
@@ -26,14 +27,11 @@ type Result<T> = std::result::Result<T, Rejection>;
 
 #[tokio::main]
 async fn main() {
-    let body = get_auction().await;
-    println!("{}", body);
-
-    let input_string: String = "{}".to_string();
-    let response = post_solution(input_string).await;
-    println!("{}", response);
-
     let clients: Clients = Arc::new(Mutex::new(HashMap::new()));
+
+    let json_input = read_file_string(
+        "C:/Users/Arjan van Hoogdalem/git/moo-offchain/examples/single_order_instance1_input.json",
+    );
 
     println!("Configuring websocket route");
     let ws_route = warp::path("ws")
@@ -44,35 +42,15 @@ async fn main() {
     let routes = ws_route.with(warp::cors().allow_any_origin());
     println!("Starting server");
     warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
+
+    ws::publish_auction(json_input);
 }
 
 fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = Infallible> + Clone {
     warp::any().map(move || clients.clone())
 }
 
-async fn get_auction() -> String {
-    //TODO error handling instead of unwrapping (https://stackoverflow.com/questions/58373663/cannot-use-the-operator-in-a-function-that-returns)
-    let request_url = "https://api.cow.fi/goerli/api/v1/auction";
-    let body = reqwest::get(request_url)
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
-    body
-}
-
-async fn post_solution(body: String) -> String {
-    let request_url = "https://api.cow.fi/goerli/api/v1/solver_competition/7809184";
-    let client = reqwest::Client::new();
-    let response = client
-        .post(request_url)
-        .body(body)
-        .send()
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
-    response
+fn read_file_string(filepath: &str) -> String {
+    let data = fs::read_to_string(filepath);
+    data.unwrap()
 }

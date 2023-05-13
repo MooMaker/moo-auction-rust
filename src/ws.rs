@@ -1,3 +1,4 @@
+// use crate::{Client, Clients, MarketMakerAuction};
 use crate::{Client, Clients};
 use futures::{FutureExt, StreamExt};
 use tokio::sync::mpsc;
@@ -63,5 +64,34 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
             None => return,
         }
         return;
+    }
+    // If it's not ping we assume it's a solution
+    else {
+        let locked = clients.lock().await;
+
+        // TODO: implement json validation
+        let isValidJson = true;
+        let mut reply_text = "Not a valid solution";
+        if isValidJson {
+            reply_text = "Solution received";
+
+            // TODO compare solution to current best
+        }
+        match locked.get(client_id) {
+            Some(v) => {
+                if let Some(sender) = &v.sender {
+                    println!("sending reply");
+                    let _ = sender.send(Ok(Message::text(reply_text)));
+                }
+            }
+            None => return,
+        }
+        return;
     };
+}
+
+pub fn publish_auction(auction_json: String, clients: &Clients) {
+    println!("publishing auction");
+    // let _ = sender.send(Ok(Message::text(auction_json)));
+    // return;
 }
