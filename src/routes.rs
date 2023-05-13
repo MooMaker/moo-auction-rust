@@ -5,7 +5,7 @@ use crate::handlers;
 
 // All routes
 pub fn routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
-    post_cow_auction()
+    post_cow_auction().or(post_announce_winner())
 }
 
 fn post_cow_auction() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
