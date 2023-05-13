@@ -1,9 +1,8 @@
 use crate::{models::Auction, ws, Clients, Result};
-use rabbitmq_stream_client::{types::Message, Environment};
-use reqwest::StatusCode;
-use warp::http::{self, header, response, HeaderValue, Response};
-use warp::hyper::body::Bytes;
+// use rabbitmq_    stream_client::{types::Message, Environment};
+// use reqwest::StatusCode;
 use warp::Reply;
+use warp::{http::StatusCode, reply, Filter};
 
 pub async fn ws_handler(ws: warp::ws::Ws, clients: Clients) -> Result<impl Reply> {
     println!("ws_handler");
@@ -16,19 +15,21 @@ pub async fn auction_handler(auction: Auction) -> Result<impl warp::Reply> {
     println!("auction_handler");
 
     //TODO: get information from header
-    let mooAuction = MooAuction::new("auction1".into(), 30);
+    // let mooAuction = MooAuction::new("auction1".into(), 30);
+
+    //TODO: fwd to MM via ws
+    // ws::publish_auction(json_input, &clients.clone());
 
     // Run the auction
-    if let Some(best_bid) = mooAuction.run().await {
-        println!("Auction closed. Best bid: {:?}", best_bid);
-    } else {
-        println!("Auction closed. No bids were placed.");
-    }
-    //TODO: fwd to MM via ws
-    ws::publish_auction(json_input, &clients.clone());
+    // if let Some(best_bid) = mooAuction.run().await {
+    //     println!("Auction closed. Best bid: {:?}", best_bid);
+    // } else {
+    //     println!("Auction closed. No bids were placed.");
+    // }
 
     //TODO: send 200 with response from the auction (via listener?)
-    Ok(StatusCode::OK)
+    Ok(warp::reply::json(&json))
+    // Ok(StatusCode::OK)
 }
 
 pub async fn announce_winner(auction: Auction) -> Result<impl warp::Reply> {

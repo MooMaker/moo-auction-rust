@@ -38,9 +38,6 @@ impl MooAuction {
         self.bids.push(bid);
     }
 
-    pub 
-
-
     // Add more methods as needed for bid validation, handling time limit, etc.
 }
 
