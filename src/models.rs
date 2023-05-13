@@ -82,3 +82,17 @@ pub struct Reserves {
 pub struct Metadata {
     pub environment: String,
 }
+
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct maker_bid {
+    pub id: u64,
+    pub token_in: String,
+    pub token_out: String,
+    pub amount_in: String,
+    pub amount_out: String,
+    pub valid_to: u64,
+    pub maker_address: String,
+    pub maker_signature: String,
+}
