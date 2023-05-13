@@ -72,10 +72,10 @@ pub struct Amm {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Reserves {
+    // TODO implement this somehow
     pub n0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48: String,
     pub n0xc00e94cb662c3520282e6f5717214004a7f26888: String,
 }
-// TODO implement this somehow
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

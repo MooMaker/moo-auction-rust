@@ -1,6 +1,10 @@
+use futures::StreamExt;
+use rabbitmq_stream_client::Environment;
 use reqwest::Error;
 use std::{collections::HashMap, convert::Infallible, fs, path::Path, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
+use tokio::task;
+use tokio::time::{sleep, Duration};
 use warp::{ws::Message, Filter, Rejection};
 
 mod handlers;
@@ -48,7 +52,15 @@ async fn main() {
     println!("Starting server");
     warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
 
-    ws::publish_auction(json_input, &clients.clone());
+    let environment = Environment::builder().build().await.unwrap();
+    let mut consumer = environment.consumer().build("mystream").await.unwrap();
+
+    let handle = consumer.handle();
+    task::spawn(async move {
+        while let Some(delivery) = consumer.next().await {
+            println!("Got message {:?}", delivery);
+        }
+    });
 }
 
 fn with_clients(clients: Clients) -> impl Filter<Extract = (Clients,), Error = Infallible> + Clone {
