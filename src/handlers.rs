@@ -18,16 +18,15 @@ pub async fn auction_handler(auction: Auction) -> Result<impl warp::Reply> {
     //TODO: fwd to MM via ws
     // ws::publish_auction(json_input, &clients.clone());
 
+    let no_bid: String = String::from("{}");
     // Run the auction
     // if let Some(best_bid) = mooAuction.run().await {
     //     println!("Auction closed. Best bid: {:?}", best_bid);
+    //     Ok(warp::reply::json(&best_bid))
     // } else {
-    //     println!("Auction closed. No bids were placed.");
+    //     Ok(warp::reply::json(&no_bid))
     // }
-
-    //TODO: send 200 with response from the auction (via listener?)
-    Ok(warp::reply::json(&json))
-    // Ok(StatusCode::OK)
+    Ok(warp::reply::json(&no_bid))
 }
 
 pub async fn announce_winner(auction: Auction) -> Result<impl warp::Reply> {

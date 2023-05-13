@@ -1,10 +1,10 @@
+use crate::models::{Amm, Bid, Metadata, Order, Token};
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
-use crate::models::{Bid, Token, Order, Amm, Metadata};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Auction {
+pub struct MooAuction {
     pub auction_id: String,
     pub time_limit: u64,
     pub deadline: Instant,
@@ -16,7 +16,7 @@ pub struct Auction {
     pub metadata: Metadata,
 }
 
-impl Auction {
+impl MooAuction {
     pub fn new(auction_id: String, time_limit: u64) -> Self {
         Self {
             auction_id,
