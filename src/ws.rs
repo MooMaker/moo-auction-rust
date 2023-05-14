@@ -1,4 +1,4 @@
-use crate::{Client, Clients};
+use crate::{auction::MooAuction, Client, Clients, MOOAUCTION};
 use futures::{FutureExt, StreamExt};
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::UnboundedReceiverStream;
@@ -27,17 +27,6 @@ pub async fn client_connection(ws: WebSocket, clients: Clients) {
     };
 
     clients.lock().await.insert(uuid.clone(), new_client);
-
-    while let Some(result) = client_ws_rcv.next().await {
-        let msg = match result {
-            Ok(msg) => msg,
-            Err(e) => {
-                println!("error receiving message for id {}): {}", uuid.clone(), e);
-                break;
-            }
-        };
-        client_msg(&uuid, msg, &clients).await;
-    }
 
     clients.lock().await.remove(&uuid);
     println!("{} disconnected", uuid);
@@ -69,6 +58,9 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
         let locked = clients.lock().await;
 
         // TODO: implement json validation
+        // TODO: send solution to auction
+        MOOAUCTION.add_bid();
+
         let reply_text = "Solution received";
 
         match locked.get(client_id) {

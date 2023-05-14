@@ -1,3 +1,4 @@
+use auction::MooAuction;
 use once_cell::sync::Lazy;
 use std::{collections::HashMap, convert::Infallible, sync::Arc};
 use tokio::sync::{mpsc, Mutex};
@@ -19,6 +20,8 @@ pub type Clients = Arc<Mutex<HashMap<String, Client>>>;
 type Result<T> = std::result::Result<T, Rejection>;
 
 pub static CLIENTS: Lazy<Clients> = Lazy::new(Default::default);
+
+pub static MOOAUCTION: Lazy<MooAuction> = Lazy::new(Default::default); //ooAuction::new(String::from("Auction1"), 30);
 
 #[tokio::main]
 async fn main() {
