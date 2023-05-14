@@ -59,7 +59,7 @@ async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
 
         // TODO: implement json validation
         // TODO: send solution to auction
-        MOOAUCTION.add_bid();
+        // MOOAUCTION.add_bid();
 
         let reply_text = "Solution received";
 

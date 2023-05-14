@@ -1,4 +1,3 @@
-use crate::auction::MooAuction;
 use crate::MOOAUCTION;
 use crate::{models::Auction, ws, Clients, Result, CLIENTS};
 use warp::Reply;
@@ -16,7 +15,8 @@ pub async fn auction_handler(auction: Auction) -> Result<impl warp::Reply> {
     println!("auction_handler");
 
     //TODO: get information from header
-    MOOAUCTION = MooAuction::new("auction1".into(), 30);
+    // MOOAUCTION = new MooAuction::new("auction1".into(), 0);
+
     ws::publish_auction(json, &CLIENTS.clone()).await;
 
     let no_bid: String = String::from("{}");
