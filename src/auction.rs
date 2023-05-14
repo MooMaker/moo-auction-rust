@@ -31,25 +31,31 @@ impl MooAuction {
 
     pub fn add_bid(&mut self, bid: Bid) {
         // Check if the bid matches the order
-        if let Some(order) = self.orders.get(&order_id) {
-            if bid.bidder_id == order.sell_token && bid.bidder_id == order.buy_token {
+        if let Some(order) = self.orders.get(&bid.id) {
+            if bid.token_in == order.sell_token && bid.token_out == order.buy_token {
                 self.bids.push(bid.clone());
-
+    
                 // Check and update the winning bid
                 if self.winning_bid.is_none() {
-                    self.winning_bid = Some(bid);
+                    self.winning_bid = Some(bid.clone());
                 } else if order.is_sell_order
-                    && bid.amount > self.winning_bid.as_ref().unwrap().amount
+                    && bid.amount_in.parse::<u64>().unwrap_or(0) > self.winning_bid.as_ref().unwrap().amount_in.parse::<u64>().unwrap_or(0)
                 {
-                    self.winning_bid = Some(bid);
+                    self.winning_bid = Some(bid.clone());
                 } else if !order.is_sell_order
-                    && bid.amount < self.winning_bid.as_ref().unwrap().amount
+                    && bid.amount_in.parse::<u64>().unwrap_or(0) < self.winning_bid.as_ref().unwrap().amount_in.parse::<u64>().unwrap_or(0)
                 {
-                    self.winning_bid = Some(bid);
+                    self.winning_bid = Some(bid.clone());
                 }
             }
         }
     }
+    
+    
+    
+
+
+    
 
     pub fn check_auction_end(&self) -> Option<Bid> {
         if Instant::now() >= self.deadline {
