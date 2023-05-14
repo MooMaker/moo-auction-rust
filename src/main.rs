@@ -21,7 +21,8 @@ type Result<T> = std::result::Result<T, Rejection>;
 
 pub static CLIENTS: Lazy<Clients> = Lazy::new(Default::default);
 
-pub static MOOAUCTION: Lazy<MooAuction> = Lazy::new(Default::default); //ooAuction::new(String::from("Auction1"), 30);
+//Original auction has 0 timelimit because it's not an actual auction but represents an empty init
+pub static MOOAUCTION: Lazy<MooAuction> = Lazy::new(|| MooAuction::new("auction1".into(), 0));
 
 #[tokio::main]
 async fn main() {
