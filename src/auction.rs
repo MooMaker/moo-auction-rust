@@ -29,27 +29,27 @@ impl MooAuction {
         }
     }
 
-    // pub fn add_bid(&mut self, bid: Bid) {
-    //     // Check if the bid matches the order
-    //     if let Some(order) = self.orders.get(&order_id) {
-    //         if bid.bidder_id == order.sell_token && bid.bidder_id == order.buy_token {
-    //             self.bids.push(bid.clone());
+    pub fn add_bid(&mut self, bid: Bid) {
+        // Check if the bid matches the order
+        if let Some(order) = self.orders.get(&order_id) {
+            if bid.bidder_id == order.sell_token && bid.bidder_id == order.buy_token {
+                self.bids.push(bid.clone());
 
-    //             // Check and update the winning bid
-    //             if self.winning_bid.is_none() {
-    //                 self.winning_bid = Some(bid);
-    //             } else if order.is_sell_order
-    //                 && bid.amount > self.winning_bid.as_ref().unwrap().amount
-    //             {
-    //                 self.winning_bid = Some(bid);
-    //             } else if !order.is_sell_order
-    //                 && bid.amount < self.winning_bid.as_ref().unwrap().amount
-    //             {
-    //                 self.winning_bid = Some(bid);
-    //             }
-    //         }
-    //     }
-    // }
+                // Check and update the winning bid
+                if self.winning_bid.is_none() {
+                    self.winning_bid = Some(bid);
+                } else if order.is_sell_order
+                    && bid.amount > self.winning_bid.as_ref().unwrap().amount
+                {
+                    self.winning_bid = Some(bid);
+                } else if !order.is_sell_order
+                    && bid.amount < self.winning_bid.as_ref().unwrap().amount
+                {
+                    self.winning_bid = Some(bid);
+                }
+            }
+        }
+    }
 
     pub fn check_auction_end(&self) -> Option<Bid> {
         if Instant::now() >= self.deadline {
