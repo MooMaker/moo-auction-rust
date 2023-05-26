@@ -1,9 +1,6 @@
 ![cow noun](https://github.com/MooMaker/moo-offchain/blob/main/images/noun.png)
-# MooMaker Offchain services
-
-
-###Smart contracts deployed:
-[Goerli](https://www.github.com/).
+# MooMaker Auction 
+Please use [moo-auction-python](https://github.com/MooMaker/moo-auction-python) instead
 
 ### Example json of Bid from market maker 
 {
